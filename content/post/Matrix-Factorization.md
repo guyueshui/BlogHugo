@@ -3,6 +3,7 @@ title: Matrix Factorization
 date: 2019-01-03 21:07:38
 categories: ['Learning Notes']
 tags: ['math','algebra']
+mathjax: true
 ---
 
 ## Preliminaries
@@ -27,6 +28,7 @@ $$
 the columns of $U$ are orthonormal if and only if the rows are orthonormal.
 
 So the definition can be summarized as below:
+
 - Hermitian: $A=A^{\star}$
 - Unitary: $A^{\star}A=AA^{\star}=I$
 - Symmetric: $A = A^{T}$
