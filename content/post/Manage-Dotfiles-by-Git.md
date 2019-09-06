@@ -1,8 +1,10 @@
 ---
 title: Manage Dotfiles by Git
 date: 2018-11-16 10:32:19
+lastmod: 2019-08-25
 tags: ['git','dotfiles']
 categories: ['Techniques']
+
 ---
 
 对于Linux用户，在 `$HOME` 文件夹下，一般都有大量的隐藏文件，形如`.conf`,`.xxxrc`等，这些都是程序的配置文件。很多人也许花了一个下午，一天，甚至一个星期，折腾某某程序的配置文件。如果这些轻易丢失了，那就是浪费生命了！所以，如何将这些文件备份，成了很多人必须要问的一个问题。
@@ -80,7 +82,7 @@ config push -u origin master
 就可以把本地仓库推送到远程，完成同步。
 
 图片测试：
-![animal-blurred-background-cat-1443710](animal-blurred-background-cat-1443710.jpg)
+![animal-blurred-background-cat-1443710](/img/animal-blurred-background-cat-1443710.jpg)
 
 ## Reference
 

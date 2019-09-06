@@ -1,10 +1,13 @@
 ---
 title: A collection of some coding problems 
 date: 2019-04-07 19:31:59
-categories: ['Learning Notes']
+lastmod: 2019-09-01
+categories: ['Notes']
 tags: ['algorithm','dynamic programming','coding problems']
 mathjax: true
 ---
+
+# 场景题
 
 ## 题一：最高得分
 
@@ -973,10 +976,10 @@ m行每行一个数表示答案
 ```
 说明：
 初始序列2 1 4 3
-$2^{q_1} = 2$ -> 第一次：1 2 3 4 -> 逆序对数0
-$2^{q_2} = 4$ -> 第二次：4 3 2 1 -> 逆序对数6
-$2^{q_3} = 1$ -> 第三次：4 3 2 1 -> 逆序对数6
-$2^{q_4} = 4$ -> 第四次：1 2 3 4 -> 逆序对数0
+$2^{q\_1} = 2$ -> 第一次：1 2 3 4 -> 逆序对数0
+$2^{q\_2} = 4$ -> 第二次：4 3 2 1 -> 逆序对数6
+$2^{q\_3} = 1$ -> 第三次：4 3 2 1 -> 逆序对数6
+$2^{q\_4} = 4$ -> 第四次：1 2 3 4 -> 逆序对数0
 
 > 首先如何计算逆序数，常用的方法是归并排序，可以顺带计算逆序数。但是由于我一开始用的是开销较大的归并，频繁的构造，复制vector，导致运行超时。后来改成了inplace的归并，速度明显提高很多。
 
@@ -1132,7 +1135,7 @@ int main()
     qs.push_back(tmp); 
   }
   // done
-  
+
   clock_t start = clock();
   UniTest(numbers, qs, false);
   cout << TimeElapsed(start) << "ms for mergesort" << endl;
@@ -1157,6 +1160,157 @@ int main()
 0.068ms for inplace mergesort
 ```
 差了3倍左右！
+
+## Josephus Problem
+
+> 这个问题是以弗拉维奥·约瑟夫命名的，他是1世纪的一名犹太历史学家。他在自己的日记中写道，他和他的40个战友被罗马军队包围在洞中。他们讨论是自杀还是被俘，最终决定自杀，并以抽签的方式决定谁杀掉谁。约瑟夫斯和另外一个人是最后两个留下的人。约瑟夫斯说服了那个人，他们将向罗马军队投降，不再自杀。约瑟夫斯把他的存活归因于运气或天意，他不知道是哪一个。
+> <div style="text-align:right">——维基百科</div>
+
+描述：人们站在一个等待被处决的圈子里。 计数从圆圈中的指定点开始，并沿指定方向围绕圆圈进行。 在跳过指定数量的人之后，执行下一个人。 对剩下的人重复该过程，从下一个人开始，朝同一方向跳过相同数量的人，直到只剩下一个人，并被释放。（牛客网上类似的题[^c]）
+
+问题即，给定人数、起点、方向和要跳过的数字，选择初始圆圈中的位置以避免被处决。
+
+解法：维基百科[^a]上也有，GeeksforGeeks[^b]还有视频教程。
+
+常见的有两种解法：
+
+- 单链表模拟
+- 数学递推
+
+显然，假设n个人编号：$0,1,2,3,\dots,n-1$. 从0号开始报数（报数从0开始），报到m-1的将被处决，然后从下一个人开始报数。直到剩下最后一个人，赦免之。
+
+第一趟：报到 m 的自然是编号为$(m-1) \mod n$.
+接着从 $m \mod n$ 开始报数，接下来又会是谁被处决呢？
+
+等等，先来看看问题是什么，我希望知道幸免者的编号。在n个人，报m个数的设定下，我希望知道幸免者编号，假设这个编号就是$f(n,m)$, 这里 $f$ 是个神奇的函数，我只要告诉它 n 和 m 它就能告诉我最后幸存者的编号。如果我能找到 $f(n, m)$ 和 $f(n-1, m)$ 的递推关系式，那将是极好的。 
+
+在第一趟之后，报数从编号 $k = m \mod n$ 开始，但是此时只有 n-1个人，我还是想知道幸存者的编号。如果此时将编号重新映射一下，比如：
+```
+k   -> 0
+k+1 -> 1
+...
+k-2 -> n-2
+```
+那么问题就变成了 n-1 个人，从0开始报数，报到 m-1 被处决，完完全全成了一个拥有同样结构的问题，但是规模更小了。显然，这个问题的解是 $f(n-1, m)$. 但是呢，我们得到的编号却不是原来的编号了，得把编号还原回去。这很简单，假设得到的编号是 x，那么映射回原编号 y
+```
+y = (x+k) mod n
+```
+于是，如果我们能够知道 $f(n-1, m)$, 那么 
+
+$$
+f(n, m) = (f(n-1,m) + m) \mod n.
+$$
+
+这就得到了递推公式，接着看一下边界条件，当n = 1时， $f(1, m) = 0$; 结束。
+
+```cpp
+int Josephus(int n, int m)
+{
+  if (n < 1)
+    throw std::invalid_argument("we need n >= 1");
+  if (n == 1)
+    return 0;
+  return (Josephus(n-1, m) + m) % n;
+}
+```
+
+## 扔骰子的期望
+
+> 拼多多2019校招正式批
+
+扔n个骰子，第i个骰子有可能掷出$X_i$种等概率的不同结果，数字从1到$X_i$. 比如$X_i = 2$, 就等可能的出现1点或2点。所有骰子的结果的最大值将作为最终结果。求最终结果的期望。
+
+输入描述：
+第一行一个整数n，表示n个骰子。（1 <= n <= 50）
+第二行n个整数，表示每个骰子的结果数$X_i$. ($2 \le X_i \le 50$)
+
+输出描述：
+输出最终结果的期望，保留两位小数。
+
+示例输入：
+```
+2
+2 2
+```
+
+示例输出：
+```
+1.75
+```
+
+> 主要考察事件概率的计算。
+
+假设有3个骰子，最大点数分别为2,3,4点。那么扔n个骰子，最终结果为1的概率如下
+
+$$
+P(1) = \frac{1}{2\times 3 \times 4} = \frac{1}{24}
+$$
+
+同理，最终结果为2, 也就是说三个骰子中最大的点数为2, 考虑每个骰子都点数都小于或等于2的概率，再减去每个骰子都小于或等于1的概率，即为
+
+$$
+\begin{gathered}
+P(2) = \frac{2\times 2\times 2}{2 \times 3 \times 4} - \frac{1}{2\times 3 \times 4} = \frac{7}{24} \newline
+P(3) = \frac{2 \times 3 \times 3}{2 \times 3 \times 4} - \frac{2\times 2\times 2}{2 \times 3 \times 4} = \frac{10}{24} \newline
+P(4) = \frac{2 \times 3 \times 4}{2 \times 3 \times 4} - \frac{2\times 3\times 3}{2 \times 3 \times 4} = \frac{6}{24}
+\end{gathered}
+$$
+
+这就求得了最终结果的所有可能的值对应的概率，可以看出相加为1, 现在可以求期望了。
+
+> 注意，当要求的点数大于当前骰子的最大点数时，那么该骰子掷出小于该点数的概率为1. 比如让一个最大点数为2的骰子掷出小于3的点数，显然概率为1.
+
+```cpp
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+vector<double> Distribution(const vector<int>& die_ranges, int support)
+{
+  vector<double> probs;
+  for (int i = 1; i <= support; ++i)
+  {
+    double pprob = 1.0; // for previous prob
+    double prob = 1.0;  // for current prob
+    for (auto e : die_ranges)
+    {
+      pprob *= min(double(i-1) / double(e), 1.0);
+      prob *= min(double(i) / double(e), 1.0);
+    }
+    probs.push_back(prob - pprob);
+  }
+  return probs;
+}
+
+int main()
+{
+  int num_die;
+  cin >> num_die;
+
+  int maxpoint = 0;
+  vector<int> die_ranges;
+  for (int i = 0, tmp; i != num_die; ++i)
+  {
+    cin >> tmp;
+    if (tmp > maxpoint)
+      maxpoint = tmp;
+    die_ranges.push_back(tmp);
+  }
+  // io done
+  vector<double> probs = Distribution(die_ranges, maxpoint);
+  
+  double expectation = 0.0;
+  for (int i = 1; i <= maxpoint; ++i)
+  {
+    expectation += (probs[i-1] * i);
+  }
+  printf("%.2f", expectation);
+
+  return 0;
+}
+```
 
 # 数据结构相关
 
@@ -1741,3 +1895,7 @@ public:
     }
 };
 ```
+
+[^a]: https://en.wikipedia.org/wiki/Josephus\_problem
+[^b]: https://www.geeksforgeeks.org/josephus-problem-set-1-a-on-solution/
+[^c]: https://www.nowcoder.com/questionTerminal/f78a359491e64a50bce2d89cff857eb6

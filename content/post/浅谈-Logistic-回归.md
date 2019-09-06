@@ -1,8 +1,10 @@
 ---
 title: 浅谈 Logistic 回归
 date: 2019-03-15 22:59:39
-categories: ['Learning Notes']
+categories: ['Notes']
 tags: ['math', 'machine learning', 'regression', 'classification']
+mathjax: true
+
 ---
 
 In editing...
@@ -35,6 +37,7 @@ $$
 ## Logistic 回归
 
 现在，我们模型的假设是
+
 $$
 \begin{split}
 y &= h_{\mathbf{\theta}}(\mathrm{x}) = g(\mathbf{\theta}^T \mathrm{x}) \\
@@ -43,16 +46,18 @@ y &= h_{\mathbf{\theta}}(\mathrm{x}) = g(\mathbf{\theta}^T \mathrm{x}) \\
 $$
 
 我们希望通过训练改变 $\theta$ 的值，进一步改善我们的模型。现在，我们打算换一个角度来看待这个问题，因为$g(\theta^T x) \in (0,1)$，正好可以表示一个概率，而之前我们看到，最小二乘实际上等价于，我对数据有一些假设（高斯白噪声），在这些假设下，做参数$\theta$的极大似然估计(MLE). 基于这个想法，我们假设，
+
 $$
 \begin{split}
-P(y=1|x;\theta) &=  h_{\theta}(x) \\
-P(y=0|x;\theta) &=  1 - h_{\theta}(x)
+P(y=1|x;\theta) &=  h\_{\theta}(x) \newline
+P(y=0|x;\theta) &=  1 - h\_{\theta}(x)
 \end{split}
 $$
 
 然后就那么刚刚好，回忆一下sigmoid函数有哪些迷人的性质，你会发现下面的式子也是对的
+
 $$
-p(y|x;\theta) = [h_{\theta}(x)]^y [1-h_{\theta}(x)]^{1-y}
+p(y|x;\theta) = [h\_{\theta}(x)]^y [1-h\_{\theta}(x)]^{1-y}
 $$
 
 再假设m个样本独立同分布，我们得到似然函数
@@ -77,14 +82,15 @@ $$
 $$
 
 注意梯度上升是沿着正梯度方向更新。给定一个训练样本 $(x,y)$, 其梯度为
+
 $$
 \begin{split}
-\frac{\partial}{\partial \theta_j} l(\theta)
+\frac{\partial}{\partial \theta\_j} l(\theta)
 &= \left(\frac{y}{g(z)} - \frac{1-y}{1-g(z)}
 \right)
-\frac{\partial g(z)}{\partial z} \frac{\partial z}{\partial \theta_j} \\
-&= (y-g(z)) \frac{\partial z}{\partial \theta_j} \\
-&= (y-h_{\theta}(x))x_j
+\frac{\partial g(z)}{\partial z} \frac{\partial z}{\partial \theta\_j} \newline
+&= (y-g(z)) \frac{\partial z}{\partial \theta\_j} \newline
+&= (y-h\_{\theta}(x))x\_j
 \end{split}
 $$
 

@@ -1,7 +1,7 @@
 ---
 title: 'LeetCode: Sum of Two Integers'
 date: 2019-03-26 14:53:51
-categories: ['Learning Notes']
+categories: ['Notes']
 tags: ['cpp','leetcode','bit manipulation']
 ---
 

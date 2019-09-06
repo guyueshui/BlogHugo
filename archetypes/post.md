@@ -6,7 +6,7 @@ keywords: []
 categories: []
 tags: []
 draft: true
-markup: "mmark"
 mathjax: false
+
 ---
 

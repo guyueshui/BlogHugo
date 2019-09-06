@@ -3,6 +3,18 @@ title: Useful Tricks
 date: 2019-01-17 22:19:05
 ---
 
+```
+ __    __               __           __               ____    ___                       
+/\ \  /\ \             /\ \      __ /\ \             /\  _`\ /\_ \                      
+\ `\`\\/'/__  __    ___\ \ \___ /\_\\ \/      ____   \ \ \L\ \//\ \     ___      __     
+ `\ `\ /'/\ \/\ \  /'___\ \  _ `\/\ \\/      /',__\   \ \  _ <'\ \ \   / __`\  /'_ `\   
+   `\ \ \\ \ \_\ \/\ \__/\ \ \ \ \ \ \      /\__, `\   \ \ \L\ \\_\ \_/\ \L\ \/\ \L\ \  
+     \ \_\\/`____ \ \____\\ \_\ \_\ \_\     \/\____/    \ \____//\____\ \____/\ \____ \ 
+      \/_/ `/___/> \/____/ \/_/\/_/\/_/      \/___/      \/___/ \/____/\/___/  \/___L\ \
+              /\___/                                                             /\____/
+              \/__/                                                              \_/__/ '`
+```
+
 此页内容多为软件使用技巧，绝大部分内容来自互联网，如有侵权，请与[我](mailto:guyueshui002@gmail.com)联系。也有部分内容系自己使用软件所得的一些经验，仅供参考。
 
 ## FFmepg
@@ -136,6 +148,7 @@ find [path...] [expression]
 - `find . -name "*name*"` - 找出当前文件夹文件名包含“name”的文件
 - `find . ! -type d -print` - 在当前目录查找非目录文件
 - `find . -newer file1 ! file2` - 查找比file1新但比file2旧的文件
+- `find -type d -empty | xargs -n 1 rmdir` - 批量删除当前目录下的空文件夹
 
 --------------
 
@@ -148,6 +161,8 @@ find [path...] [expression]
 --------------
 
 ## Git
+
+**创建别名**
 
 使用 `git log` 查看提交历史，但是输出冗杂。通常使用
 ```sh
@@ -173,10 +188,37 @@ $ git graph
 * be15df2 fixed picture address
 * 97a36f3 Initial commit
 ```
+
 **忽略已经添加的文件**
+
 ```bash
 git rm --cached <somefiles>
 ```
+
+**删除commit历史**
+
+如果不小心将隐私信息推送至远程仓库（如github），那么仅仅删除再更新再推送到远程仓库覆盖是不够的，别人还是可以通过你的commit历史查到你所做的更改，所以这种情况下必须删除之前所有的commit history. 大致思路是创建一个孤立分支，然后重新添加文件，再删除master分支，将新建的分支重命名为master，再推送到远程强制覆盖[^a]。
+```bash
+# Check out to a temporary branch:
+git checkout --orphan TEMP_BRANCH
+
+# Add all the files:
+git add -A
+
+# Commit the changes:
+git commit -am "Initial commit"
+
+# Delete the old branch:
+git branch -D master
+
+# Rename the temporary branch to master:
+git branch -m master
+
+# Finally, force update to our repository:
+git push -f origin master
+```
+
+[^a]: https://gist.github.com/heiswayi/350e2afda8cece810c0f6116dadbe651
 
 ## Command `g++`
 
@@ -208,20 +250,18 @@ g++ main.cpp -S
 
 [aria2c](https://aria2.github.io/) 是个好东西。
 
-配置：参考 [aria2配置示例](https://binux.blog/2012/12/aria2-examples/)
-webui:
-- [YAAW](http://binux.github.io/yaaw/demo/)
-- [ziahamza](https://ziahamza.github.io/webui-aria2/#)
-- [AriaNg](http://ariang.mayswind.net/latest/)
+- 配置：参考 [aria2配置示例](https://binux.blog/2012/12/aria2-examples/)
+- webui:
+  - [YAAW](http://binux.github.io/yaaw/demo/)
+  - [ziahamza](https://ziahamza.github.io/webui-aria2/#)
+  - [AriaNg](http://ariang.mayswind.net/latest/)
 
 Note: jsonrpc 地址格式为 `http://token:<rpc-secret>@hostname:port/jsonrpc`
 令牌填写自己设置的 `rpc-secret`
-<center>
-<img src="https://i.loli.net/2018/12/28/5c263327c4214.png" width="500" />
-</center>
+![](https://i.loli.net/2018/12/28/5c263327c4214.png)
 
 `xxx` 替换为自己设置的 `rpc-secret`
-<center><img src="https://i.loli.net/2018/12/28/5c263398854c3.png" width="500" /></center>
+![](https://i.loli.net/2018/12/28/5c263398854c3.png)
 
 ## HTML
 

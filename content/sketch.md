@@ -3,6 +3,14 @@ title: 札记
 date: 2018-12-14 13:59:49
 ---
 
+## 2019 年 9 月
+
+C++静态函数有什么不同？
+
+- 静态函数具有单文件作用域，不能被其他文件所用
+- 不会和其他文件中的同名函数冲突
+- 静态函数分配在程序的静态内存区，对于频繁调用的函数，声明成静态可以避免调用函数时压栈出栈，速度快很多
+
 ## 2019 年 8 月
 
 8月的第一周，就惹我家领导生气了。问题还蛮严重的，第一次感觉到，原来感情真的很脆弱，就像鸡蛋壳一样。一不小心，就容易捅破。好的感情需要用心经营，很明显是我经营不善，我必须自食其果。这种问题都是常见的问题，但是还是会犯，明明听过很多前车之鉴，但自己就是犯贱，偏要以身试法。何苦来！跳脱不开，陷于苦海，即便早该明白的，也早已经明白的道理，没有切身的感受，终究不能领悟，不知代价。人之一物，可能大都是这样的。
@@ -119,6 +127,10 @@ E
 ```
 从这个输出中可以看出，对于局部对象，先构造后析构。全局静态对象最后析构，局部静态对象的析构顺序不定，但总体保持先构造者后析构的规律。可以看到，无论`func()`调用几次，静态对象只在第一次调用时构造。
 
+--------------------
+
+感觉最近很忙，但又不知道忙什么。感觉有忙不完的事情，但又不知道从何忙起。细想来，其实就两件事：一个毕业，一个工作。踏踏实实干吧！
+
 ## 2019 年 7 月
 
 - 一个虚基类（纯虚函数构成的接口类，abstract type）不能生成实例，所以不需要定义构造函数。就算定义了，也无法通过构造函数生成对象。
@@ -132,6 +144,7 @@ E
 > 1. Primitives
 > 2. Means of combination
 > 3. Means of abstraction
+>
 > <div style="text-align:right">──SICP</div>
 
 --------------------
@@ -322,6 +335,7 @@ love
 > - At the library, program, or function level, use comments to describe *what*.
 > - Inside the library, program, or function, use comments to describe *how*.
 > - At the statement level, use comments to describe *why*.
+>
 > <div style="text-align:right">──<a href="https://www.learncpp.com/cpp-tutorial/comments/">learncpp.com</a></div>
 
 --------------------
