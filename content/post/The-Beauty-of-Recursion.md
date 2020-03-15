@@ -1,6 +1,7 @@
 ---
 title: The Beauty of Recursion
 date: 2019-04-23 09:08:28
+lastmod: 2019-10-29
 categories: ['Notes']
 tags: ['recursion','programming thought']
 mathjax: true
@@ -78,7 +79,7 @@ Hence we get the following:
 $$
 \text{opt}(n) =
 \begin{cases}
-n, & n \le 2 \\
+n, & n \le 2 \newline
 \text{opt}(n-1) + \text{opt}(n-2), & n > 2.
 \end{cases}
 $$

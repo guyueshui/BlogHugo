@@ -108,6 +108,70 @@ nohup command &> /dev/null &
 ```
 等价于以上的操作。单纯的`nohup command`会在当前目录创建一个隐藏文件以写入命令的输出。以上命令将程序的输出重定向至比特桶丢弃。
 
+### 同时输出到console和文件
+
+将命令输出重定向到文件：
+```bash
+SomeCommand > SomeFile.txt  # overwrite
+SomeCommand >> SomeFile.txt # append
+```
+将命令输出(stdout)及报错(stderr)重定向到文件：
+```bash
+SomeCommand &> SomeFile.txt
+SomeCommand &>> SomeFile.txt
+```
+同时输出到console和文件：
+```bash
+SomeCommand 2>&1 | tee SomeFile.txt     # overwrite
+SomeCommand 2>&1 | tee -a SomeFile.txt  # append
+```
+
+```
+          || visible in terminal ||   visible in file   || existing
+  Syntax  ||  StdOut  |  StdErr  ||  StdOut  |  StdErr  ||   file
+==========++==========+==========++==========+==========++===========
+    >     ||    no    |   yes    ||   yes    |    no    || overwrite
+    >>    ||    no    |   yes    ||   yes    |    no    ||  append
+          ||          |          ||          |          ||
+   2>     ||   yes    |    no    ||    no    |   yes    || overwrite
+   2>>    ||   yes    |    no    ||    no    |   yes    ||  append
+          ||          |          ||          |          ||
+   &>     ||    no    |    no    ||   yes    |   yes    || overwrite
+   &>>    ||    no    |    no    ||   yes    |   yes    ||  append
+          ||          |          ||          |          ||
+ | tee    ||   yes    |   yes    ||   yes    |    no    || overwrite
+ | tee -a ||   yes    |   yes    ||   yes    |    no    ||  append
+          ||          |          ||          |          ||
+ n.e. (*) ||   yes    |   yes    ||    no    |   yes    || overwrite
+ n.e. (*) ||   yes    |   yes    ||    no    |   yes    ||  append
+          ||          |          ||          |          ||
+|& tee    ||   yes    |   yes    ||   yes    |   yes    || overwrite
+|& tee -a ||   yes    |   yes    ||   yes    |   yes    ||  append
+```
+
+Ref: 
+1. https://askubuntu.com/questions/420981/how-do-i-save-terminal-output-to-a-file
+2. https://www.gnu.org/software/bash/manual/bash.html#Redirections
+
+### 从系统中踢出某个用户
+
+```bash
+# See the pid of the user's login process.
+$ who -u
+yychi    tty1         2020-02-19 21:06  旧        460
+
+# Let him know he will be kick off.
+$ echo "You'll be kick off by system administrator." | write yychi
+
+# Kick off.
+$ kill -9 460
+
+# Done.
+```
+
+Ref: https://www.putorius.net/kick-user-off-linux-system.html
+
+
 --------------
 
 ## Command `find`
@@ -195,6 +259,21 @@ $ git graph
 git rm --cached <somefiles>
 ```
 
+**推送本地分支到远程**
+```bash
+# 远程分支如果不存在，则自动创建。
+git push origin <local_brach>:<remote_branch>
+```
+
+**拉取远程分支到本地**
+```bash
+# 从远程分支切换（并创建，如果不存在）本地分支
+git checkout -b <local_branch> origin/<remote_branch>
+
+# 另：取回远程分支并创建对应的本地分支，不换自动切换到该分支
+git fetch origin <remote_brach>:<local_branch>
+```
+
 **删除commit历史**
 
 如果不小心将隐私信息推送至远程仓库（如github），那么仅仅删除再更新再推送到远程仓库覆盖是不够的，别人还是可以通过你的commit历史查到你所做的更改，所以这种情况下必须删除之前所有的commit history. 大致思路是创建一个孤立分支，然后重新添加文件，再删除master分支，将新建的分支重命名为master，再推送到远程强制覆盖[^a]。
@@ -220,6 +299,30 @@ git push -f origin master
 
 [^a]: https://gist.github.com/heiswayi/350e2afda8cece810c0f6116dadbe651
 
+**合并某个文件到当前分支**
+
+例如当前在master分支，希望合并某个分支dev的某个或多个文件到当前分支：
+```bash
+git checkout dev file1 file2 ...
+```
+但是上述做法会强行覆盖当前分支的文件，没有冲突处理，更安全的做法是先从当前分支新建分支master_temp，然后在master_temp中checkout，最后再将master_temp分支merge到master分支：
+```bash
+# Create a branch based on master
+git checkout -b master_temp
+
+# Chechkout file1 from dev to master_temp
+git checkout dev file1
+git commit -m "checkout file1 from dev"
+
+# Switch to master and merge, then delete
+git checkout master
+git merge master_temp
+git branch -d master_temp
+```
+
+Ref: https://segmentfault.com/a/1190000008360855
+
+
 ## Command `g++`
 
 自定义包含路径
@@ -244,14 +347,19 @@ g++ main.cpp -c
 g++ main.cpp -S
 ```
 
+仅预编译
+```bash
+g++ main.cpp -E > main.i
+```
+
 ------------
 
 ## Aria2c
 
-[aria2c](https://aria2.github.io/) 是个好东西。
+[aria2c](https://aria2.github.io/) 是个好东西。支持连接，磁力，种子下载。轻量且强大，可直接使用，也可作为服务端，配合WebUI使用。
 
 - 配置：参考 [aria2配置示例](https://binux.blog/2012/12/aria2-examples/)
-- webui:
+- WebUI:
   - [YAAW](http://binux.github.io/yaaw/demo/)
   - [ziahamza](https://ziahamza.github.io/webui-aria2/#)
   - [AriaNg](http://ariang.mayswind.net/latest/)
@@ -262,6 +370,10 @@ Note: jsonrpc 地址格式为 `http://token:<rpc-secret>@hostname:port/jsonrpc`
 
 `xxx` 替换为自己设置的 `rpc-secret`
 ![](https://i.loli.net/2018/12/28/5c263398854c3.png)
+
+## MPV
+
+[MPV](https://mpv.io) 是一个轻量、简约、跨平台的播放器。据我自己体验，在Linux下比mplayer播放效果要好，mplayer倍速会掉帧，而mpv则不太明显。
 
 ## HTML
 
@@ -365,6 +477,33 @@ xrandr --output eDP-1 --auto
 ```bash
 netstat -tulpn | grep LISTEN
 ```
+
+## Htop基本操作
+
+Htop类似于top，但比top更现代化，支持鼠标操作，支持颜色主题。在命令行键入htop，会呈现如下界面。(图片来源：https://blog.csdn.net/freeking101/article/details/79173903)
+
+![](/img/htop.jpg)
+
+平均负载区的三个数字分别表示过去5、10、15分钟系统的平均负载。进程区每一列的意义分别是：
+- PID: 进程号
+- USER: 进程所有者的用户名
+- PRI: 优先级别
+- NI: NICE值（优先级别数值），越小优先级越高
+- VIRT: 虚拟内存
+- RES: 物理内存
+- SHR: 共享内存
+- S: 进程状态（S[leep], R[unning], Z[ombie], N表示优先级为负数）
+- CPU%: 该进程占用的CPU使用率
+- MEM%: 该进程占用的物理内存和总内存的百分比
+- TIME+: 该进程启动后占用的CPU时间
+- Command: 该进程的启动命令
+
+常用快捷键可在htop界面按?显示。
+
+- H: 显示/隐藏用户子线程
+- Space: 标记进程
+- k: 杀死已标记进程
+
 
 
 # Reference

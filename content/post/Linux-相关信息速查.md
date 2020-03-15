@@ -1,6 +1,7 @@
 ---
-title: Linux 相关信息速查
+title: Linux 使用指北
 date: 2019-03-07 19:22:02
+lastmod: 2019-09-16
 categories: ['Linux']
 tags: ['info','reference']
 ---
@@ -22,7 +23,7 @@ uptime                      # 查看系统运行时间、负载、用户数量
 cat /proc/loadavg           # 查看系统负载
 ```
 
-<!-- more -->
+<!--more-->
 
 ## 内存外存
 
@@ -59,7 +60,11 @@ who                         # 查看活动用户
 id <用户名>                  # 查看用户的 ID、组信息
 cut -d: -f1 /etc/passwd     # 查看系统中所有用户
 cut -d: -f1 /etc/group      # 查看系统所有组
+usermod -a -G group1,group2 user  # 将用户追加到组
+groups user                 # 查看用户所属的组
 ```
+
+参考：https://linux.cn/article-10768-1.html
 
 ## 进程状态相关
 
@@ -67,4 +72,10 @@ cut -d: -f1 /etc/group      # 查看系统所有组
 ps -ef                      # 查看所有进程
 ps aux                      # 同上
 top                         # 动态显示进程状态
+```
+
+## 添加用户到组
+
+```bash
+usermod -aG <group> <user>
 ```

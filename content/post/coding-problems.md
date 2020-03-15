@@ -1312,6 +1312,482 @@ int main()
 }
 ```
 
+## 递增二叉树
+
+> 网易互娱2020校招正式批
+
+给定一颗二叉树，每个节点又一个正整数权值。若一棵二叉树，每一层的节点权值之和都严格小于下一层的节点权值之和，则称这颗二叉树为递增二叉树。现在给你一颗二叉树，请判断它是否是递增二叉树。
+
+输入描述：
+
+输入的第一行是一个正整数T（0 < T <= 50）。接下来有T组样例，对于每组样例，输入的第一行是一个正整数N，表示树的节点个数（0 < N <= 100，节点编号为0到N-1）。接下来是N行，第k行表示编号为k的节点，输入格式为：VALUE LEFT RIGHT，其中VALUE表示其权值，是一个不超过5000的自然数；LEFT和RIGHT分别表示该节点的左孩子编号和右孩子编号。如果其不存在左孩子或右孩子，则LEFT或RIGHT为-1.
+
+输出描述：
+
+对于每一组样例，输出一个字符串。如果该二叉树是一颗递增树，则输出YES，否则输出NO。
+
+样例输入：
+```
+2
+8
+2 -1 -1
+1 5 3
+4 -1 6
+2 -1 -1
+3 0 2
+2 4 7
+7 -1 -1
+2 -1 -1
+8
+21 6 -1
+52 4 -1
+80 0 3
+31 7 -1
+21 -1 -1
+59 -1 -1
+50 5 -1
+48 -1 1
+```
+
+样例输出：
+```
+YES
+NO
+```
+
+> 这题最恶心的是输入格式，居然不是直接给一颗建好的二叉树的根节点，而是给数据让你自己建树。处理输入还比较麻烦，首先每个节点都有编号，得先存起来，然后一个一个构造节点，然后再连接起来，关键是连好以后，头节点在哪？还得找一下，最后的判断，实际上是二叉树的层次遍历，遍历得到一个向量，判断是否为严格单调递增即可。
+
+![](/img/posted/tree.png)
+
+上图是第一个样例画出来的二叉树，左边圆圈中对应的是节点编号，右边的数字是节点的权值。要画这棵树，首先画左边的编号之间的连接图，然后把对应编号换作节点的权值即可。那么头节点在哪呢？入度为0的就是了！
+
+```cpp
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <functional>
+
+using namespace std;
+
+struct TreeNode
+{
+  int val;
+  TreeNode* left;
+  TreeNode* right;
+  TreeNode(int v)
+    : val(v), left(nullptr), right(nullptr) {}
+};
+
+struct NodeInfo
+{
+  TreeNode* pnode;  
+  int left;
+  int right;
+
+  NodeInfo(TreeNode* p, int l, int r):
+    pnode(p), left(l), right(r) {}
+};
+
+// build the tree and return the root
+TreeNode* BuildTree(vector<NodeInfo>& nodes)
+{
+  vector<int> counts(nodes.size(), 0);
+  // link
+  for (size_t i = 0; i != nodes.size(); ++i)
+  {
+    int left = nodes[i].left;
+    int right = nodes[i].right;
+    if (left != -1)
+    {
+      nodes[i].pnode->left = nodes[left].pnode;
+      ++counts[left];
+    }
+    if (right != -1)
+    {
+      nodes[i].pnode->right = nodes[right].pnode;
+      ++counts[right];
+    }
+  }
+  // find root
+  for (size_t i = 0; i != counts.size(); ++i)
+  {
+    if (counts[i] == 0)
+      return nodes[i].pnode;
+  }
+  throw std::logic_error("no root");
+}
+
+// Is the tree a increasing tree?
+bool IsIncrTree(TreeNode* root)
+{
+  if (!root) return false;
+  vector<vector<int>> mat; 
+
+  // tranverse the tree by layer
+  std::function<void(TreeNode*, int)> layer_travel;
+  layer_travel = 
+    [&mat, &layer_travel](TreeNode* p, int depth) mutable
+    {
+      if (p == nullptr) return;
+      if ((int)mat.size() == depth)
+        mat.emplace_back(vector<int>());
+        
+      mat[depth].push_back(p->val);
+      layer_travel(p->left, depth + 1);
+      layer_travel(p->right, depth + 1);
+    };
+
+  layer_travel(root, 0);
+  
+  vector<int> sums;
+  for (auto& row : mat)
+  {
+    int sum = 0;
+    for (auto c : row) sum += c;
+    sums.push_back(sum);
+  }
+
+  for (size_t i = 1; i != sums.size(); ++i)
+  {
+    if (sums[i-1] >= sums[i])
+      return false;
+  }
+  return true;
+}
+
+int main()
+{
+  int num_test;
+  cin >> num_test;
+  
+  for (int num_nodes = 0; num_test--;)
+  {
+    cin >> num_nodes;
+    vector<NodeInfo> nodes;
+    while (num_nodes--)
+    {
+      int v, l, r;
+      cin >> v >> l >> r;
+      TreeNode* p = new TreeNode(v);
+      nodes.emplace_back(p, l, r);
+    }
+    TreeNode* root = BuildTree(nodes);
+    if (IsIncrTree(root))
+      cout << "YES\n";
+    else
+      cout << "NO\n";
+
+    // memory clean
+    for (auto& node : nodes)
+    {
+      delete node.pnode;
+      node.pnode = nullptr;
+    }
+  } // nodes released
+  return 0;
+}
+```
+
+## 经过棋盘的最小开销
+
+> 58同城2020校招
+
+现有一个地图，由横线与竖线组成（参考围棋棋盘），起点在左上角，终点在右下角。每次行走只能沿线移动到相邻的点，每走一步产生一个开销。计算从起点到终点的最小开销为多少。
+
+输入描述：
+$m \times n$ 的地图表示如下
+```
+3
+3
+1 3 4
+2 1 2
+4 3 1
+
+其中m=3，n=3表示3*3的矩阵
+行走路径为：下>右>右>下
+```
+
+输出描述：
+```
+路径总长：1+2+1+2+1=7
+```
+
+> 动态规划入门题，可惜我当时碰到DP就慌，而且只会递归DP，自顶向下，复杂度会高很多。
+
+假设用一个矩阵，名字就叫dp，表示最优结果。dp(i,j)表示从起点到坐标(i,j)的最小开销。很容易得到递推关系：
+
+$$
+\text{dp}(i, j) = 
+\begin{cases}
+\text{map}(i,j) + \min(\text{dp}(i, j-1), \text{dp}(i-1, j)) & i, j > 0\newline
+\sum\_{x=0}^{j-1} \text{map}(i, j) & i = 0 \newline
+\sum\_{x=1}^{i-1} \text{map}(i, j) & j = 0
+\end{cases}.
+$$
+
+```cpp
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+// greedy
+int MinCost(const vector<vector<int>>& mat)
+{
+  int row = static_cast<int>(mat.size());
+  int col = static_cast<int>(mat[0].size());
+  int i = 0;
+  int j = 0;
+  int ret = 0;
+  while (i < row-1 && j < col-1)
+  {
+    ret += mat[i][j];
+    if (mat[i+1][j] < mat[i][j+1]) ++i;
+    else ++j;
+  }
+  if (i == row-1)
+  {
+    for (int x = j; x <= col-1; ++x)
+      ret += mat[i][x];
+  }
+  else
+  {
+    for (int x = i; x <= row-1; ++x)
+      ret += mat[x][j];
+  }
+  return ret;
+}
+
+// dynamic programming
+int mincost(const vector<vector<int>>& mat)
+{
+  int row = static_cast<int>(mat.size());
+  int col = static_cast<int>(mat[0].size());
+  vector<vector<int>> dp(row, vector<int>(col, 0));
+  // initialize
+  dp[0][0] = mat[0][0];
+  for (int i = 1; i < row; ++i)
+    dp[i][0] = dp[i-1][0] + mat[i][0];
+  for (int j = 1; j < col; ++j)
+    dp[0][j] = dp[0][j-1] + mat[0][j];
+
+  for (int i = 1; i < row; ++i)
+  {
+    for (int j = 1; j < col; ++j)
+    {
+      dp[i][j] = mat[i][j] + min(dp[i-1][j], dp[i][j-1]);
+    }
+  }
+  return dp[row-1][col-1];
+}
+
+int main()
+{
+  int num_rows, num_cols;
+  cin >> num_rows >> num_cols;
+  vector<vector<int>> mat(num_rows, vector<int>(num_cols, 0));
+  for (int i = 0; i != num_rows; ++i)
+  {
+    for (int j = 0, x; j != num_cols; ++j)
+    {
+      cin >> x;
+      mat[i][j] = x;
+    }
+  }
+  // io done
+  cout << mincost(mat);
+  return 0;
+}
+```
+
+## 出列的顺序（类约瑟夫环）
+
+> VIVO 2020校招正式批
+
+将N个人排成一排，从第一个人开始报数，如果报数是M的倍数就出列，报道队尾后则回到队头继续报数，直到所有人都出列。
+
+输入描述：
+输入2个正整数，空格分隔，第一个代表人数N，第二个代表M。
+
+输出描述：
+输出一个数组，每个数据表示原来在队列中的位置，用空格隔开，表示出列顺序
+
+输入实例：
+```
+6 3
+```
+
+输出示例：
+```
+3 6 4 2 5 1
+
+说明：6个人排成一排，原始位置编号1-6，最终输出为3 6 4 2 5 1，
+表示的是原来编号为3的第一个出列，编号为1的最后出列。
+```
+
+> 思路：类似于约瑟夫环，使用链表模拟整个过程即可。
+
+```cpp
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+struct Node
+{
+  int val;
+  Node* next;
+  Node(int n): val(n), next(nullptr) {}
+};
+
+vector<int> ToQueue(int num_employee, int mod)
+{
+  if (num_employee == 0) return vector<int>();
+  if (num_employee == 1) return vector<int>(1, 1);
+  // else num_employee >= 2
+  
+  // build list
+  vector<Node*> nodes;
+  for (int i = 1; i <= num_employee; ++i)
+  {
+    Node* p = new Node(i);
+    nodes.push_back(p);
+  }
+  for (size_t i = 1; i != nodes.size(); ++i)
+  {
+    nodes[i-1]->next = nodes[i];
+  }
+  nodes.back()->next = nodes.front();
+
+  Node* prev = nodes.back();
+  Node* cur = nodes.front();
+  vector<int> ret;
+  for (int count = 1; cur->next != cur; ++count)
+  {
+    if (count % mod == 0)
+    {
+      ret.push_back(cur->val);
+      prev->next = cur->next;
+      cur = cur->next;
+    }
+    else
+    {
+      prev = cur;
+      cur = cur->next;
+    }
+  }
+  ret.push_back(cur->val);
+  // memory clean
+  for (Node* p : nodes) delete p;
+  return ret;
+}
+
+int main()
+{
+  int num_employee, mod;
+  cin >> num_employee >> mod;
+  for (auto e : ToQueue(num_employee, mod))
+    cout << e << " ";
+  return 0;
+}
+```
+
+## 最短通行时间
+
+> 度小满金融2020校招
+
+有N辆车要陆续通过一座最大承重为W的桥，其中第i辆车的重量为w[i], 过桥时间为t[i]. 要求：第辆车上桥时间不早于第i-1辆车上桥的时间；i任意时刻桥上所有车辆的总重量不超过W。那么，所有车辆都通过这座桥的所需的最短时间是多少？
+
+输入：
+```
+第一行输入两个整数N，W（1 <= N, W <= 100000）
+第二行输入N个整数w[1]到w[N]（1 <= w[i] <= W）
+第三行输入N个整数t[1]到t[N]（1 <= t[i] <= 10000）
+
+4 2
+1 1 1 1
+2 1 2 2
+```
+
+输出：
+```
+4
+```
+
+> 干就完了，模拟！
+
+```cpp
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+int MinTime(const vector<int>& car_weights,
+            vector<int>& pass_times,
+            const int max_weight)
+{
+  int len = car_weights.size();
+  int elapsed_time = 0;
+  int cur = 0;
+  int w = max_weight;
+
+  for (;;)
+  {
+    int start = cur;
+    while (cur < len && w >= car_weights[cur])
+    {
+      w -= car_weights[cur++];
+    }
+
+    if (cur >= len) // reach the last car
+    {
+      elapsed_time += 
+        *std::max_element(pass_times.begin() + start, pass_times.end());
+      return elapsed_time;
+    }
+    else
+    {
+      // each time a car passed, some other car may board the bridge
+      int mintime_idx = 0;
+      for (int i = 0; i < cur; ++i)
+      {
+        if (pass_times[mintime_idx] > pass_times[i] && pass_times[i] != 0)
+          mintime_idx = i;
+      }
+      elapsed_time += pass_times[mintime_idx];
+
+      for (int i = 0; i < cur; ++i) // update time
+        pass_times[i] = max(pass_times[i] - pass_times[mintime_idx], 0);
+
+      // car @mintime_idx has passed, now @w may be free to pass a new car
+      w += car_weights[mintime_idx];
+    }
+  }
+}
+
+int main()
+{
+  int num_car, max_weight;
+  cin >> num_car >> max_weight;
+  vector<int> car_weights;
+  for (int n = num_car, w; n--;)
+  {
+    cin >> w;
+    car_weights.push_back(w);
+  }
+  vector<int> pass_times;
+  for (int n = num_car, t; n--;)
+  {
+    cin >> t;
+    pass_times.push_back(t);
+  }
+  // io done
+  cout << MinTime(car_weights, pass_times, max_weight);
+  return 0;
+}
+```
+
 # 数据结构相关
 
 **大部分出自[《剑指Offer》](https://www.nowcoder.com/ta/coding-interviews)**
@@ -1323,6 +1799,7 @@ int main()
 ```c++
 #include <iostream>
 #include <vector>
+#include <functional>
 
 using std::vector;
 
@@ -1337,17 +1814,25 @@ struct TreeNode {
 // print the right-most node of each layer of a tree.
 vector<int> PrintRightMost(TreeNode* root)
 {
-    if (!root) throw std::invalid_argument("empty tree");
-    vector<int> ret;
-    while (root)
+  // - time: O(N), where N is #TreeNodes
+  // - space: O(N + logN)
+  if (!root) return vector<int>(); 
+  vector<vector<int>> mat;
+
+  std::function<void(TreeNode*, int)> layer_travel =
+    [&mat, &layer_travel](TreeNode* p, int depth)
     {
-        ret.push_back(root->val);
-        // prefer see right child than left
-        if (!root->right)
-            root = root->left;
-        root = root->right;
-    }
-    return ret;
+      if (p == nullptr) return;
+      if (depth == (int)mat.size())
+        mat.emplace_back(vector<int>());
+      mat[depth].push_back(p->val);
+      layer_travel(p->left, depth + 1);
+      layer_travel(p->right, depth + 1);
+    };
+
+  vector<int> ret;
+  for (auto &row : mat) ret.push_back(row.back());
+  return ret;
 }
 ```
 
@@ -1866,6 +2351,7 @@ Input: [0,1,0,3,12]
 Output: [1,3,12,0,0]
 ```
 Note:
+
 - You must do this in-place without making a copy of the array.
 - Minimize the total number of operations.
 
@@ -1896,6 +2382,115 @@ public:
 };
 ```
 
+## Kth Largest Element in an Array
+
+From: [LeetCode125][125].
+
+Find the **k**th largest element in an unsorted array. Note that it is the kth largest element in the sorted order, not the kth distinct element.
+
+Example 1:
+```
+Input: [3,2,1,5,6,4] and k = 2
+Output: 5
+```
+Example 2:
+```
+Input: [3,2,3,1,2,4,5,5,6] and k = 4
+Output: 4
+```
+Note: You may assume k is always valid, 1 ≤ k ≤ array's length.
+
+> 思路：利用快排的partition思想，每次选取一个pivot，将数组分为小于pivot和大于pivot的两部分。此时pivot的index就是排好序之后的index，与k相比，如果出较小，则在后半部分（大于pivot）再次划分，如果较大，则在前半部分划分。直到划分出来的pivot的index等于k。还要注意的是，这样找出来的是第k小，用数组长度减一下，才是第k大，注意index的变换。
+
+```cpp
+#include <iostream>
+#include <vector>
+using namespace std;
+
+class Solution {
+public:
+  int findKthLargest(vector<int>& nums, int k) {
+    // from 王小康：快排partition知道吧？
+    // 就一刀一刀地劈开，劈一次你知道pivot的index，
+    // 如果比k小，继续在右边劈，如果比k大，就在左边劈！
+    
+    if (nums.empty()) throw std::invalid_argument("empty arr");
+    if (nums.size() == 1) return nums.front();
+    // else @nums has >= 2 elems
+    int mid = Partition(nums, 0, nums.size());
+    k = nums.size() - k; // kth large = len+1-k small
+    while (mid != k)
+    {
+        if (mid < k)
+            mid = Partition(nums, mid + 1, nums.size());
+        else
+            mid = Partition(nums, 0, mid);
+    }
+    return nums[mid];
+  }
+  
+  size_t Partition(vector<int>& arr, size_t beg, size_t end)
+  {
+    size_t pivot = beg;
+    size_t i = pivot + 1;
+    for (auto j = pivot + 1; j < end; ++j)
+    {
+      if (arr[j] < arr[pivot])
+      {
+        std::swap(arr[j], arr[i]);
+        ++i;
+      }
+    }
+    std::swap(arr[i-1], arr[pivot]);
+    return i - 1;
+  }
+};
+
+int main()
+{
+  vector<int> nums = {3,2,1,5,6,4};
+  Solution so;
+  cout << so.findKthLargest(nums, 2);
+  return 0;
+}
+```
+
+## 最大连续子列
+
+From: [LeetCode53][53].
+
+Given an integer array `nums`, find the contiguous subarray (containing at least one number) which has the largest sum and return its sum.
+
+Example:
+
+```
+Input: [-2,1,-3,4,-1,2,1,-5,4],
+Output: 6
+Explanation: [4,-1,2,1] has the largest sum = 6.
+```
+
+> 设置两个变量，一个记录当前连加的值，另一个记录目前位置最大连续子序列，迭代更新。
+
+```cpp
+int MaxSubArray(const vector<int>& arr)
+{
+  int max_so_far = INT_MIN;
+  int sum = 0;
+  for (int e : arr)
+  {
+    if (sum > 0)
+      sum += e;
+    else
+      sum = e;
+
+    max_so_far = max(max_so_far, sum);
+  }
+  return max_so_far;
+}
+```
+
+[125]: https://leetcode.com/problems/kth-largest-element-in-an-array/
+[53]: https://leetcode-cn.com/problems/maximum-subarray/
 [^a]: https://en.wikipedia.org/wiki/Josephus\_problem
 [^b]: https://www.geeksforgeeks.org/josephus-problem-set-1-a-on-solution/
 [^c]: https://www.nowcoder.com/questionTerminal/f78a359491e64a50bce2d89cff857eb6
