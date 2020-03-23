@@ -1,6 +1,6 @@
 ---
 title: "{{ replace .Name "-" " " | title }}"
-date: {{ dateFormat "Mon Jan 2 2006" .Date }}
+date: {{ .Date }}
 lastmod: {{ .Date }}
 keywords: []
 categories: []

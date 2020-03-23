@@ -3,9 +3,10 @@ title: Links
 date: 2018-12-18 10:25:24
 ---
 
-## Friends
+## Meaningful blogs
 
-- [Ryan](https://ruanzz.github.io)
+- [Yihui Xie](https://yihui.org/cn/)：有个性，有思想的博客。
+- [Ryan](https://ruanzz.github.io)：同学。
 
 ## Algorithms
 

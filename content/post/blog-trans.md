@@ -1,10 +1,10 @@
 ---
 title: "博客迁移记录"
-date: Sun Aug 25 2019
-lastmod: 2019-08-25T16:00:50+08:00
+date: 2019-08-25T16:00:50+08:00
+lastmod: 2020-03-16
 keywords: []
-categories: []
-tags: []
+categories: [Notes]
+tags: ['字体', 'beautify']
 mathjax: false
 
 ---
@@ -108,6 +108,53 @@ $ fc-list | grep Linux
 }
 ```
 
+**另外可以使用Google Font API直接使用字体而不用下载字体文件**
+
+因为中文字体文件一般比较大，而且放在Github上加载很慢，所以如果有线上字体可以用，自然优先考虑。之前我只换了英文字体，中文还保留着黑体。于是乎中文sans西文serif放在一起非常不协调。最后还是折腾一下，把中文字体也给换了。
+
+具体方法很简单，找到主题定义字体的地方：
+```scss
+//! file: themes/even/src/css/_variables.scss
+// Font family of the site.
+$global-font-family: 'Linux Libertine O', 'Noto Serif SC', 'Source Sans Pro', 'Helvetica Neue', Arial, sans-serif !default;
+```
+这里我将西文优先选择Linux Libertine O字体，而中文则使用Noto Serif SC字体。
+
+> 注意：这里的在线字体必须是存在于[Google Fonts][8]里面的字体。
+
+然后就是在网页上添加一个表单[^c]：
+```html
+<html>
+  <head>
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Tangerine">
+    <style>
+      body {
+        font-family: 'Tangerine', serif;
+        font-size: 48px;
+      }
+    </style>
+  </head>
+  <body>
+    <div>Making the Web Beautiful!</div>
+  </body>
+</html>
+```
+由于主题的`head.html`在每个网页都会调用，所以我将表单直接添加到该文件中：
+```html
+<!-- file: even/layouts/partials/head.html -->
+{{ range .Site.Params.customCSS -}}
+<link rel="stylesheet" href="{{ "/css/" | relURL }}{{ . }}">
+{{ end }}
+
+<!-- Insert style sheet here -->
+<link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Noto+Serif+SC">
+```
+这样一来，网站就会加载来自Google Font API的线上字体，如下图：
+![](/img/posted/google-font-api.png)
+
+
 ### 图片和表格居中
 
 因为Even主题默认是居左的，所以这里改为居中[^b]。
@@ -177,6 +224,7 @@ Hugo的部署，没有Hexo那样一步到位，每次都要手动操作。以至
 
 [^a]: [.Format | Hugo][4]
 [^b]: [Hugo 建站记录][7]
+[^c]: [Get Started with the Google Fonts API][9]
 
 [1]: https://hexo.io
 [2]: https://gohugo.io
@@ -185,3 +233,5 @@ Hugo的部署，没有Hexo那样一步到位，每次都要手动操作。以至
 [5]: https://gohugo.io/hosting-and-deployment/hosting-on-github/
 [6]: https://github.blog/2016-02-01-working-with-submodules/
 [7]: https://cszxyang.github.io/post/hugo/build/
+[8]: https://fonts.google.com/?query=noto+serif+sc
+[9]: https://developers.google.com/fonts/docs/getting_started

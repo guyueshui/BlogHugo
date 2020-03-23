@@ -1,6 +1,7 @@
 ---
 title: Polybar 的配置笔记
 date: 2019-01-16 21:33:17
+lastmod: 2020-03-16
 categories: ['Techniques']
 tags: ['polybar']
 ---
@@ -273,6 +274,7 @@ ramp-load-6-foreground = #ff5555
 ramp-load-7-foreground = #ff5555
 ```
 这里我们定义了每个等级展示字符的前景色。等级越高，颜色越红，表示警告CPU使用快超标了！这样整个变化就有了颜色相伴，更加直观！最后完成的效果如下：
+
 ![kpVXGt.gif](https://s2.ax1x.com/2019/01/17/kpVXGt.gif)
 
 内存模块也是类似的。先看一下配置，
@@ -356,7 +358,7 @@ ramp-free-6 = ▇
 ramp-free-7 = █
 ;;; }}}
 ```
-配置出来的效果见[上图](#group-4)。
+配置出来的效果见[上图](#gallery-4)。
 
 ### 电池模块
 
@@ -409,6 +411,7 @@ animation-charging-0-foreground = #ff5555
 animation-charging-framerate = 750
 ```
 上面这段配置定义了充电时的动画，当你插上电源，电池图标会依次按照0、1、2的图案切换。然后每个图案都有各自的前景色，切换的速率是 750. 完成后的效果如下：
+
 ![kpQbCQ.gif](https://s2.ax1x.com/2019/01/17/kpQbCQ.gif)
 
 ### MPD 模块
@@ -468,6 +471,7 @@ label-time-font = 8
 ;;; }}}
 ```
 配置好我们需要的样式就大功告成啦，看一下效果：
+
 ![kpgZLt.gif](https://s2.ax1x.com/2019/01/17/kpgZLt.gif)
 
 
