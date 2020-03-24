@@ -1,8 +1,9 @@
 ---
 title: Android 刷机的一般步骤
 date: 2018-09-18 23:00:05
-tags: ['android', 'flash']
 categories: ['Techniques']
+tags: ['android', '刷机']
+
 ---
 
 ## 1. 事前准备

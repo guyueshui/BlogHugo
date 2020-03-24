@@ -1,11 +1,14 @@
 ---
 title: Links
 date: 2018-12-18 10:25:24
+comment: false
+
 ---
 
-## Meaningful blogs
+## Meaningful Blogs
 
-- [Yihui Xie](https://yihui.org/cn/)：有个性，有思想的博客。
+- [Yihui Xie](https://yihui.org/cn/)：有个性，有思想的博客（单方面友链）。
+- [Kai Qi](https://jiandan94.github.io/)：统计学博士在读，有内涵的哥们。
 - [Ryan](https://ruanzz.github.io)：同学。
 
 ## Algorithms
@@ -23,8 +26,6 @@ date: 2018-12-18 10:25:24
   + [Solution](http://community.schemewiki.org/?SICP-Solutions)
   + Video Lecture: [bilibili](https://www.bilibili.com/video/av8515129)
 
-
-## Machine Learning
 
 ## LaTeX
 

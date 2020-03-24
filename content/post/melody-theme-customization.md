@@ -2,7 +2,8 @@
 title: Melody 主题的一些个人更改
 date: 2018-12-19 14:31:24
 categories: ['Techniques']
-tags: ['beautify']
+tags: [美化, 个性化]
+
 ---
 
 ## 更改字体

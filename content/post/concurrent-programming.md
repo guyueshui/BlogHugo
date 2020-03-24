@@ -4,7 +4,7 @@ date: Thu Aug 29 2019
 lastmod: 2019-08-29T21:40:23+08:00
 keywords: []
 categories: [Notes]
-tags: ['multi-thread','concurrent','mutex']
+tags: [多线程, 并发]
 mathjax: false
 
 ---

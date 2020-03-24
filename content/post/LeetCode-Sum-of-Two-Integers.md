@@ -2,7 +2,8 @@
 title: 'LeetCode: Sum of Two Integers'
 date: 2019-03-26 14:53:51
 categories: ['Notes']
-tags: ['cpp','leetcode','bit manipulation']
+tags: ['cpp','leetcode',位运算]
+
 ---
 
 记录一下LeetCode做的一道题。要求实现两个整数的加法，但不能使用内置的`+`或`-`. 原题地址：https://leetcode.com/problems/sum-of-two-integers/

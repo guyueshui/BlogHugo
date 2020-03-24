@@ -2,7 +2,8 @@
 title: 位域结构体简介
 date: 2019-08-06 20:43:02
 categories: ['Notes']
-tags: ['cpp','struct','bit field']
+tags: [cpp, 结构体, 位运算]
+
 ---
 
 最近实习接触到一个新的知识点，C/C++的位域结构体。

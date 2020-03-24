@@ -2,7 +2,7 @@
 title: GDB 基本用法
 date: 2019-08-18 16:14:24
 categories: [Techniques]
-tags: [debug, linux, gdb, cpp]
+tags: [debug, gdb, cpp]
 ---
 
 废话以后有时间再加。

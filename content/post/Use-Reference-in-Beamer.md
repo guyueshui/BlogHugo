@@ -1,7 +1,7 @@
 ---
 title: 在 Beamer 中使用参考文献
 date: 2019-01-03 16:05:47
-categories: ['Notes']
+categories: ['Techniques']
 tags: ['latex', 'beamer', '排版']
 ---
 

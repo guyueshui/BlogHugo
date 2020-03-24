@@ -3,7 +3,8 @@ title: HTML 美化 Markdown 排版
 date: 2018-12-16 00:04:38
 lastmod: 2019-08-25
 categories: ['Techniques']
-tags: ['layout','beautify','html']
+tags: [排版, 美化, html]
+
 ---
 
 [Markdown](https://daringfireball.net/projects/markdown/syntax) 是一门轻量标记型语言，因其简单易用而受众甚广。但是正因其简单，故而也有一部分局限性（虽然说它保留的即是最常用、最基本的排版功能）。本文就来说说在使用 Markdown 排版的时候，如何引入一点 HTML 的技巧来帮助我们排版的更加好看。
@@ -34,7 +35,7 @@ tags: ['layout','beautify','html']
 
 ```html
 <font size='3' color="red">I am red of size 3</font>
-<font size=5px color="#0066FF">I am 天依蓝 of size 5px</font>
+<font size=5px color="#66CCFF">I am 天依蓝 of size 5px</font>
 <font face="verdana" color="green">I am verdana of color green</font>
 <u>I am underlined</u>
 <s>I am deleted :(</s>
@@ -48,8 +49,9 @@ look<sup>at</sup><sub>me</sub>
 <div style="background-color:black">举世皆白我独黑</div>
 ```
 的排版效果：
+
 <font size='3' color="red">I am red of size 3</font>
-<font size=5px color="#0066FF">I am 天依蓝 of size 5px</font>
+<font size=5px color="#66CCFF">I am 天依蓝 of size 5px</font>
 <font face="verdana" color="green">I am verdana of color green</font>
 <u>I am underlined</u>
 <s>I am deleted :(</s>

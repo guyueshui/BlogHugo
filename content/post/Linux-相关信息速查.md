@@ -3,7 +3,8 @@ title: Linux 使用指北
 date: 2019-03-07 19:22:02
 lastmod: 2019-09-16
 categories: ['Linux']
-tags: ['info','reference']
+tags: [常用命令,'reference']
+
 ---
 
 本文主要引用 [Liam Huang](https://liam.page/2016/11/06/Linux-Info-Cheatsheet/) 的博客。

@@ -1,7 +1,7 @@
 ---
 title: Newifi Mini 安装 PandoraBox
 date: 2017-02-21 16:01:55
-tags: ['smart router','custom','flash']
+tags: [路由器,个性化,刷机]
 categories: ['Techniques']
 ---
 

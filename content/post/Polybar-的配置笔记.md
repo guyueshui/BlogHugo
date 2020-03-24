@@ -3,7 +3,7 @@ title: Polybar 的配置笔记
 date: 2019-01-16 21:33:17
 lastmod: 2020-03-16
 categories: ['Techniques']
-tags: ['polybar']
+tags: ['polybar', 个性化]
 ---
 
 前略。

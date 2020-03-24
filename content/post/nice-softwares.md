@@ -3,8 +3,8 @@ title: "小内存机器的自我救赎"
 date: Thu Mar 12 2020
 lastmod: 2020-03-12T09:46:54+08:00
 keywords: []
-categories: [Notes]
-tags: ['nice apps']
+categories: [应用推荐]
+tags: []
 draft: false
 mathjax: false
 

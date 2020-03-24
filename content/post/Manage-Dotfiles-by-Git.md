@@ -1,8 +1,8 @@
 ---
-title: Manage Dotfiles by Git
+title: 使用Git管理配置文件
 date: 2018-11-16 10:32:19
 lastmod: 2020-03-16
-tags: ['git','dotfiles']
+tags: [git]
 categories: ['Techniques']
 
 ---

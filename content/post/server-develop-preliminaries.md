@@ -4,7 +4,7 @@ date: Fri Sep 6 2019
 lastmod: 2019-09-06T19:37:55+08:00
 keywords: []
 categories: [Notes]
-tags: [os, network, tcp, udp]
+tags: [操作系统, 网络, tcp, udp]
 draft: false
 mathjax: false
 
