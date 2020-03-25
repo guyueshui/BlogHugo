@@ -322,6 +322,10 @@ git branch -d master_temp
 
 Ref: https://segmentfault.com/a/1190000008360855
 
+**解决合并冲突**
+
+Ref: https://stackoverflow.com/questions/161813/how-to-resolve-merge-conflicts-in-git
+
 
 ## Command `g++`
 
