@@ -200,6 +200,7 @@ find [path...] [expression]
 
 - name - 按照文件名查找
     + `find <dir> -name "*.cpp"`: 在目录dir下查找后缀为cpp的文件
+    + `-name`默认不支持正则表达式，顶多支持通配符`*`
 - perm - 按照文件权限查找
 - user - 按照文件所有者查找
 - group - 按照文件所有组查找
@@ -207,12 +208,24 @@ find [path...] [expression]
 - size - 按照文件大小查找
 - ...
 
+**正则表达式**
+
+```bash
+find path -regex "<regex>"
+```
+但是默认的正则表达式引擎我也不知道是啥，反正不解析我习惯的那种正则语法。故使用：
+```bash
+find . -regextype posix-extended -regex ".*\.(log|aux|blg)"
+```
+上述命令找出当前文件夹及子文件夹所有后缀名为`log`,`aux`,`blg`的文件。
+
 **几个例子**
 
 - `find . -name "*name*"` - 找出当前文件夹文件名包含“name”的文件
 - `find . ! -type d -print` - 在当前目录查找非目录文件
 - `find . -newer file1 ! file2` - 查找比file1新但比file2旧的文件
 - `find -type d -empty | xargs -n 1 rmdir` - 批量删除当前目录下的空文件夹
+- `find -tyle l -exec ls -l {} +` - 找出当前文件夹下损坏的软连接
 
 --------------
 
@@ -322,10 +335,62 @@ git branch -d master_temp
 
 Ref: https://segmentfault.com/a/1190000008360855
 
-**解决合并冲突**
+**Git merge**
 
-Ref: https://stackoverflow.com/questions/161813/how-to-resolve-merge-conflicts-in-git
+当你觉得很多时候对于一个命令的很多子命令或者选项不是很清晰，而且查了忘，忘了查，那多半是你不理解它的工作机制。或者说它对你来说不是那么自然易懂，这个时候就需要深入以下，了解以下它的基本原理，帮助自己理解，以便记忆。
 
+`git merge`就是如此，你要知道merge的含义是什么？它其实就是在被merge的分支上重现要merge的commits. 比如说：
+```
+a---b---c---d---e (master)
+    \
+     `--A---B---C (dev)
+```
+你当前在master分支的e节点，你要merge dev分支。其实就是将A、B、C三个commit在master分支上重现，仿佛master分支上曾经也做过这些改动。那么冲突的来源就是你在两个分支中，对同一个文件作了不同的改动，如何解决不言而喻。
+
+小朋友，你是否有很多？
+
+Q: 我想只重现B节点怎么办？<br />
+A: `git checkout master && git cherry-pick 62ecb3`，这里`62ecb3`是节点B的commit标识。
+
+Q: 我想重现A-B，但不要C怎么办？<br />
+A: `git checkout -b newbranch 62ecb3 && git rebase --onto master 76cada^`，这里`76cada`是A节点的commit标识。先基于B创建一个分支，这个分支包含了A节点的改动，然后rebase到master上去，结果就是A和B重现在master分支上。
+
+Ref:
+
+1. https://stackoverflow.com/questions/161813/how-to-resolve-merge-conflicts-in-git
+2. [Cherry-Picking specific commits from another branch](https://www.devroom.io/2010/06/10/cherry-picking-specific-commits-from-another-branch/)
+
+**Fork之后如何同步fork源的更新**
+
+see: https://www.zhihu.com/question/28676261
+
+Ref:
+
+1. https://link.zhihu.com/?target=https%3A//help.github.com/articles/configuring-a-remote-for-a-fork/
+2. https://link.zhihu.com/?target=https%3A//help.github.com/articles/syncing-a-fork/
+
+**从另一个分支检出某个文件并重命名**
+
+有时候开了一个孤立分支，但是想参考其他分支的代码，而当前分支又有同名文件，此时就需要从其他分支检出文件并重命名。
+```bash
+# show the content of a.cpp in specific commit HEAD^
+git show HEAD^:a.cpp
+
+# that's done
+git show HEAD^:a.cpp > b.cpp
+```
+
+Ref: search "git-checkout older revision of a file under a new name" in stack overflow
+
+**查看已被跟踪的文件**
+
+```bash
+git ls-files
+```
+
+Ref: search "how can i make git show a list of the files that are being tracked" in stack overflow
+
+----------------
 
 ## Command `g++`
 
@@ -475,12 +540,16 @@ xrandr --output eDP-1 --off
 xrandr --output eDP-1 --auto
 ```
 
+--------
+
 ## 网络
 
 查看被监听端口
 ```bash
 netstat -tulpn | grep LISTEN
 ```
+
+--------
 
 ## Htop基本操作
 

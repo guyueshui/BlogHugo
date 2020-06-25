@@ -34,6 +34,7 @@ comment: false
 - [Online Equation Editor](https://www.latex4technics.com/)
 - [Getting Started with LaTeX](https://www.maths.tcd.ie/~dwilkins/LaTeXPrimer/)
 - [LaTeX-WikiBook](https://en.wikibooks.org/wiki/LaTeX/Mathematics#Dots)
+- [MiKTeX](https://miktex.org/): Smaller LaTeX distribution compared with TeXLive.
 
 
 ## For Fun
