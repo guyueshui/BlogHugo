@@ -362,12 +362,30 @@ Ref:
 
 **Fork之后如何同步fork源的更新**
 
+```bash
+# see remote status
+git remote -v
+
+# add upstream if not exist one
+git remote add upstream https://github.com/<origin_owner>/<origin_repo>.git
+git remote -v
+```
+从上游仓库 fetch 分支和提交点，提交给本地 master，并会被存储在一个本地分支 upstream/master
+```bash
+git fetch upstream
+```
+切换到任意分支，merge已经fetch的分支即可：
+```bash
+git checkout somebrach
+git merge upstream/master
+```
+
 see: https://www.zhihu.com/question/28676261
 
 Ref:
 
-1. https://link.zhihu.com/?target=https%3A//help.github.com/articles/configuring-a-remote-for-a-fork/
-2. https://link.zhihu.com/?target=https%3A//help.github.com/articles/syncing-a-fork/
+1. [Configureing a remote for a fork](https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/configuring-a-remote-for-a-fork)
+2. [Syncing a fork](https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/syncing-a-fork)
 
 **从另一个分支检出某个文件并重命名**
 

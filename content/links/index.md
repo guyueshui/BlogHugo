@@ -35,6 +35,7 @@ comment: false
 - [Getting Started with LaTeX](https://www.maths.tcd.ie/~dwilkins/LaTeXPrimer/)
 - [LaTeX-WikiBook](https://en.wikibooks.org/wiki/LaTeX/Mathematics#Dots)
 - [MiKTeX](https://miktex.org/): Smaller LaTeX distribution compared with TeXLive.
+- [Table Generator](https://tablesgenerator.com): A handy tool for generating TeX tables.
 
 
 ## For Fun

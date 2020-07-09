@@ -4,6 +4,10 @@ date: 2018-12-14 13:59:49
 
 ---
 
+## 2020 年 7 月
+
+在LaTeX里面排表格真是件苦差事，送你一个相见恨晚的网站： https://tablesgenerator.com
+
 ## 2020 年 6 月
 
 How to close GUI on Ubuntu?
