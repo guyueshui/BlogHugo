@@ -1,4 +1,8 @@
 [submodule "public"]
 	path = public
-	url = git@github.com:guyueshui/guyueshui.github.io.git
+	url = https://github.com/guyueshui/guyueshui.github.io.git
+	branch = master
+[submodule "themes/even"]
+	path = themes/even
+	url = https://github.com/olOwOlo/hugo-theme-even.git
 	branch = master
