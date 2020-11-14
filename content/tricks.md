@@ -231,9 +231,74 @@ find . -regextype posix-extended -regex ".*\.(log|aux|blg)"
 
 ## Command `grep`
 
+最基本用法：
+```bash
+# 查找somefile中匹配到something的行
+$ grep "something" somefile
+
+# 定位something所在的行并将接下来的3行一并输出
+$ grep "something" somefile -A 3
+
+# 定位something所在的行并将之前的3行一并输出
+$ grep "something" somefile -B 3
+
+# 定位something所在的行并将上下3行一并输出
+$ grep "something" somefile -C 3
+```
+
+**使用正则表达式**
+
+`grep`支持三种正则：basic (BRE), extend (ERE), perl (PCRE). 不同的`grep`实现方式不同，详见手册。一般extend最为常用，语法为
+```bash
+# 在somefile中查找包含his或者her的行
+$ grep -E "his|her" somefile
+```
+
+Ref:
+
+- [grep 命令系列：grep 中的正则表达式](https://linux.cn/article-6941-1.html)
+
+--------------
+
+## Command `xargs`
+
+```bash
+$ whatis xargs
+xargs (1)            - build and execute command lines from standard input
+```
+
+Ref:
+
+- [xargs命令：一个给其他命令传递参数的过滤器](http://c.biancheng.net/linux/xargs.html)
+
+
 --------------
 
 ## Command `sed`
+
+--------------
+
+## Command `cut`
+
+```bash
+$ whatis cut
+cut (1)              - remove sections from each line of files
+```
+
+基本用法：
+
+```bash
+# 以:为分隔符分割每行，并选择第1,2,4列输出
+$ cut -d: -f1,2,4 /etc/passwd
+root:x:0
+bin:x:1
+daemon:x:2
+mail:x:12
+ftp:x:11
+http:x:33
+nobody:x:65534
+dbus:x:81
+```
 
 --------------
 

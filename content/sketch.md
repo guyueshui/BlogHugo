@@ -4,6 +4,38 @@ date: 2018-12-14 13:59:49
 
 ---
 
+## 2020 年 11 月
+
+给老婆买了一加8T，性价比太高了吧！内存翻一倍只加300块！
+
+## 2020 年 10 月
+
+月初干了一件惊天地，泣鬼神的大事儿：我结婚啦！老婆很漂亮，我很爱她，她也爱我！希望以后可以辛福美满，步步高升～
+
+--------------------
+
+**collections.deque v.s. Queue.Queue** in python
+
+`Queue.Queue` and `collections.deque` serve different purposes. `Queue.Queue` is intended for allowing different threads to communicate using queued messages/data, whereas `collections.deque` is simply intended as a datastructure. That's why `Queue.Queue` has methods like `put_nowait()`, `get_nowait()`, and `join()`, whereas `collections.deque` doesn't. `Queue.Queue` isn't intended to be used as a collection, which is why it lacks the likes of the in operator.
+
+It boils down to this: if you have multiple threads and you want them to be able to communicate without the need for locks, you're looking for `Queue.Queue`; if you just want a queue or a double-ended queue as a datastructure, use `collections.deque`.
+
+Finally, accessing and manipulating the internal deque of a `Queue.Queue` is playing with fire - you really don't want to be doing that.
+
+--------------------
+
+> 如无必要，勿增实体。
+
+see: https://stackoverflow.com/a/717261
+
+## 2020 年 9 月
+
+mini自闭中...，大作业还未完成！
+
+## 2020 年 8 月
+
+mini开发中...
+
 ## 2020 年 7 月
 
 在LaTeX里面排表格真是件苦差事，送你一个相见恨晚的网站： https://tablesgenerator.com
